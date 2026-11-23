@@ -54,7 +54,11 @@ namespace GameClicker
         private ComboBox _cboProfile;
         private TextBox _txtGameProc;
         private string _activeProfile = "";              // 当前生效的 Profile 名（"" = 根配置）
-        private string _lastFgMatched = "@none";         // 上次匹配到的进程（去抖，避免重复切换）
+        private string _lastFgMatched = "@none";         // 上次匹配到的进程（去抖，避免重复切换）
+        /// <summary>手动切换配置后，在此之前自动切换被抑制。</summary>
+        private DateTime _autoSwitchSuppressedUntil = DateTime.MinValue;
+        /// <summary>手动切换配置后，在此之前自动切换被抑制。</summary>
+        private DateTime _autoSwitchSuppressedUntil = DateTime.MinValue;
 
         private ListView _lstPoints;
         private Button _btnBatchRecord;
