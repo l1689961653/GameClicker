@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="1.0.0.0" name="GameClicker.app" type="win32" />
+
+  <!--
+    这里刻意使用 asInvoker（不强制提权）。
+    原因：requestedExecutionLevel 是编译期固定的，一旦强制提权，
+    程序就再也无法以普通权限启动，"是否默认以管理员身份运行"也就无法做成运行时选项。
+    改为 asInvoker 后，由程序自己按设置决定：
+      · 勾选「默认以管理员身份运行」→ 启动时用 runas 自我提权（会有一次 UAC）
+      · 不勾选                        → 直接以当前权限启动（无 UAC）
+    提权逻辑见 Elevation.cs。默认行为与旧版一致（默认开启）。
+    注意：这里不写出被禁用的那个级别名称，避免字符串扫描误判。
+  -->
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+    <security>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+
+  <!-- 声明兼容的 Windows 版本 -->
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}" /><!-- Win10/11 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}" /><!-- Win8.1 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}" /><!-- Win8 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}" /><!-- Win7 -->
+    </application>
+  </compatibility>
+
+  <!-- 高 DPI 感知：避免在缩放显示器上界面模糊、坐标偏移 -->
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware>
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2,PerMonitor</dpiAwareness>
+      <longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+    </windowsSettings>
+  </application>
+</assembly>
